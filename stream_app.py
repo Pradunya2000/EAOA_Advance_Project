@@ -34,7 +34,7 @@ from langchain.agents.agent_types import AgentType
 from langchain_community.tools.ddg_search import DuckDuckGoSearchRun
 from langchain_community.vectorstores import Chroma
 from langchain.docstore.document import Document
-from chromadb import PersistentClient
+# from chromadb import PersistentClient
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from asteval import Interpreter
