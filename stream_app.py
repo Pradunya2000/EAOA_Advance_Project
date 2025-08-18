@@ -40,6 +40,7 @@ from langchain.chains import RetrievalQA
 from asteval import Interpreter
 import psycopg2
 from langchain_community.vectorstores.pgvector import PGVector
+from langchain_community.vectorstores import FAISS
 
 # =============================================================================
 # --- ⚙️ INTEGRATED BACKEND LOGIC ---
@@ -482,11 +483,8 @@ with tabs[1]:
                         docs = text_splitter.create_documents([st.session_state.session_text])
 
                         # ✅ FIX: Use in-memory Chroma
-                        vectordb = Chroma.from_documents(
-                            docs,
-                            embedding=embeddings,
-                            persist_directory=None
-                        )
+                        vectordb = FAISS.from_documents(docs, embedding=embeddings)
+
 
                         retriever = vectordb.as_retriever()
                         qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
