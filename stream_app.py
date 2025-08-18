@@ -41,6 +41,15 @@ from asteval import Interpreter
 import psycopg2
 from langchain_community.vectorstores.pgvector import PGVector
 
+
+from chromadb.config import Settings
+
+# In-memory Chroma (no disk persistence)
+client_settings = Settings(
+    chroma_db_impl="duckdb+memory",
+    persist_directory=None
+)
+
 # =============================================================================
 # --- ⚙️ INTEGRATED BACKEND LOGIC ---
 # =============================================================================
@@ -473,18 +482,25 @@ with tabs[1]:
     with st.container():
         st.subheader("Ask a Question")
         query = st.text_input("Your question about the document", placeholder="e.g., 'What is the main topic of the document?'")
+        
         if st.button("Get Answer", use_container_width=True):
             if query and st.session_state.session_text:
                 with st.spinner("Analyzing document and generating answer..."):
                     try:
                         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
                         docs = text_splitter.create_documents([st.session_state.session_text])
-                        
-                        vectordb = Chroma.from_documents(docs, embedding=embeddings)
+
+                        # ✅ FIX: Use in-memory Chroma
+                        vectordb = Chroma.from_documents(
+                            docs,
+                            embedding=embeddings,
+                            client_settings=client_settings
+                        )
+
                         retriever = vectordb.as_retriever()
                         qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
                         result = qa.run(query)
-                        
+
                         st.success("Answer:")
                         st.write(result)
                     except Exception as e:
