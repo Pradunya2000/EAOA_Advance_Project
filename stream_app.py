@@ -41,15 +41,6 @@ from asteval import Interpreter
 import psycopg2
 from langchain_community.vectorstores.pgvector import PGVector
 
-
-from chromadb.config import Settings
-
-# In-memory Chroma (no disk persistence)
-client_settings = Settings(
-    chroma_db_impl="duckdb+memory",
-    persist_directory=None
-)
-
 # =============================================================================
 # --- ⚙️ INTEGRATED BACKEND LOGIC ---
 # =============================================================================
