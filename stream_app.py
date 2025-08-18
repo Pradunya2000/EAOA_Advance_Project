@@ -494,7 +494,7 @@ with tabs[1]:
                         vectordb = Chroma.from_documents(
                             docs,
                             embedding=embeddings,
-                            client_settings=client_settings
+                            persist_directory=None
                         )
 
                         retriever = vectordb.as_retriever()
