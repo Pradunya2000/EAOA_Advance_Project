@@ -470,30 +470,30 @@ with tabs[1]:
 
     st.markdown("---")
     
-with st.container():
-    st.subheader("Ask a Question")
-    query = st.text_input("Your question about the document", placeholder="e.g., 'What is the main topic of the document?'")
-    if st.button("Get Answer", use_container_width=True):
-        if query and st.session_state.session_text:
-            with st.spinner("Analyzing document and generating answer..."):
-                try:
-                    # Connect to your existing Neon database
-                    # NOTE: Your app must have already saved this document to Neon
-                    # This code assumes the document is already in the DB.
-                    # The get_memory_vectorstore() function handles the connection.
-                    vectordb = get_memory_vectorstore()
-                    retriever = vectordb.as_retriever()
-                    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-                    result = qa.run(query)
-                    
-                    st.success("Answer:")
-                    st.write(result)
-                except Exception as e:
-                    st.error(f"❌ Query failed: {str(e)}")
-        elif not st.session_state.session_text:
-            st.warning("⚠️ No document uploaded. Please upload a document first.")
-        else:
-            st.warning("Please enter a question.")
+    with st.container():
+        st.subheader("Ask a Question")
+        query = st.text_input("Your question about the document", placeholder="e.g., 'What is the main topic of the document?'")
+        if st.button("Get Answer", use_container_width=True):
+            if query and st.session_state.session_text:
+                with st.spinner("Analyzing document and generating answer..."):
+                    try:
+                        # Connect to your existing Neon database
+                        # NOTE: Your app must have already saved this document to Neon
+                        # This code assumes the document is already in the DB.
+                        # The get_memory_vectorstore() function handles the connection.
+                        vectordb = get_memory_vectorstore()
+                        retriever = vectordb.as_retriever()
+                        qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+                        result = qa.run(query)
+                        
+                        st.success("Answer:")
+                        st.write(result)
+                    except Exception as e:
+                        st.error(f"❌ Query failed: {str(e)}")
+            elif not st.session_state.session_text:
+                st.warning("⚠️ No document uploaded. Please upload a document first.")
+            else:
+                st.warning("Please enter a question.")
 # -----------------------------------------
 # Tool 3: Advanced Calculator
 # -----------------------------------------
