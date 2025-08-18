@@ -32,9 +32,9 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.agents import initialize_agent, Tool
 from langchain.agents.agent_types import AgentType
 from langchain_community.tools.ddg_search import DuckDuckGoSearchRun
-# from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.docstore.document import Document
-# from chromadb import PersistentClient
+from chromadb import PersistentClient
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from asteval import Interpreter
@@ -477,11 +477,10 @@ with tabs[1]:
             if query and st.session_state.session_text:
                 with st.spinner("Analyzing document and generating answer..."):
                     try:
-                        # Connect to your existing Neon database
-                        # NOTE: Your app must have already saved this document to Neon
-                        # This code assumes the document is already in the DB.
-                        # The get_memory_vectorstore() function handles the connection.
-                        vectordb = get_memory_vectorstore()
+                        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+                        docs = text_splitter.create_documents([st.session_state.session_text])
+                        
+                        vectordb = Chroma.from_documents(docs, embedding=embeddings)
                         retriever = vectordb.as_retriever()
                         qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
                         result = qa.run(query)
@@ -494,6 +493,7 @@ with tabs[1]:
                 st.warning("⚠️ No document uploaded. Please upload a document first.")
             else:
                 st.warning("Please enter a question.")
+
 # -----------------------------------------
 # Tool 3: Advanced Calculator
 # -----------------------------------------
