@@ -15,7 +15,7 @@ python-docx>=1.1.0
 pymupdf>=1.24.1  # For 'fitz' to handle PDFs
 duckduckgo-search>=5.1.0
 asteval>=0.9.31
-chromadb>=0.4.0
+# chromadb>=0.4.0
 sentence-transformers>=2.7.0
 gunicorn
 python-multipart
@@ -26,3 +26,4 @@ transformers
 sentence-transformers
 psycopg2-binary
 pgvector
+faiss-cpu
