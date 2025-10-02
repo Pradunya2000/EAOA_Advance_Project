@@ -50,7 +50,7 @@ from langchain_community.vectorstores import FAISS
 # SECURELY CONFIGURE THE LLM AND EMBEDDINGS
 try:
     llm = ChatOpenAI(
-        model="provider-3/gpt-4o-mini",
+        model="provider-3/gpt-5-nano",
         temperature=0.3,
         streaming=True,
         base_url="https://api.a4f.co/v1",
